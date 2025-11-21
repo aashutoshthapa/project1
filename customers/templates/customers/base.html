@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Student Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'customers/style.css' %}">
+</head>
+<body>
+
+    <nav class="main-navbar">
+        <div class="nav-container">
+            <a href="{% url 'customer_dashboard' %}" class="brand-logo">Student Portal</a>
+            
+            <div class="nav-links">
+                {% if request.user.is_authenticated %}
+                    <!-- Logged In Student View -->
+                    <span class="nav-item">
+                        Hello, {{ request.user.username }}
+                    </span>
+                    <a href="{% url 'customer_dashboard' %}" class="nav-item">My Books</a>
+                    <a href="{% url 'customer_logout' %}" class="btn btn-logout">Logout</a>
+                {% else %}
+                    <!-- Guest View -->
+                    <a href="{% url 'customer_login' %}" class="nav-item">Login</a>
+                    <a href="{% url 'customer_signup' %}" class="nav-item">Sign Up</a>
+                    <a href="{% url 'admin_login' %}" class="nav-item">Admin Access</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <!-- Display Messages (Success/Error) -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        <!-- Child pages will inject their content here -->
+        {% endblock %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends 'management/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+       
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <h3>Total Books</h3>
+            <p class="stat-number">{{book_count}}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Customers</h3>
+            <p class="stat-number">{{customer_count}}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Transactions</h3>
+            <p class="stat-number">{{transaction_count}}</p>
+        </div>
+    </div>
+    
+ {% endblock %}

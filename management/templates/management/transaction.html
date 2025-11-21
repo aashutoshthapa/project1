@@ -1,0 +1,75 @@
+{% extends 'management/base.html' %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Transactions Management</h1>
+    <a href="{% url 'addtransaction' %}" class="btn btn-primary">Add Transaction</a>
+</div>
+
+<!-- Display messages -->
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="search-bar-container">
+    <form method="GET" class="search-form">
+        <input type='text' name='q' class="search-input" value="{{request.GET.q}}" placeholder ='Search by Customer name, Bookname'>
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+</div>
+
+<!-- Transactions Table -->
+<div class="table-container">
+    <h2>Transactions List</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Book</th>
+                <th>Issue Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+                <th>Due Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ t.customer.name }}</td>
+                <td>{{ t.book.name }}</td>
+                <td>{{ t.issue_date }}</td>
+                <td>{{ t.return_date|default:"N/A" }}</td>
+                <td>
+                    {% if t.returned %}
+                        <span class="status-returned">Returned</span>
+                    {% else %}
+                        <span class="status-issued">Issued</span>
+                    {% endif %}
+                </td>
+                <td class="action-links">
+                    {% if not t.returned %}
+                        <a href="{% url 'return_transaction' t.id %}" class="link-action">Return</a>
+                    {% endif %}
+                    <a href="{% url 'delete_transaction' t.id %}" class="link-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+                
+                <td class="due-status">{{ t.due_status }}</td> 
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="empty-table">No transactions yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

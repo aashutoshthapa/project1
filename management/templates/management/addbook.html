@@ -1,0 +1,48 @@
+{% extends 'management/base.html' %}
+{% block title %}Add Book{% endblock %}
+{% block content %}
+
+<div class="form-wrapper">
+    <div class="form-header">
+        <h1>Add New Book</h1>
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Book Name</label>
+            <input type="text" name="name" class="form-input" placeholder="Enter book name" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" class="form-input" placeholder="Enter author name" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Genre</label>
+            <input type="text" name="genre" class="form-input" placeholder="Enter genre">
+        </div>
+        
+        <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="quantity" class="form-input" placeholder="Enter quantity" min="0" required>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Book</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+

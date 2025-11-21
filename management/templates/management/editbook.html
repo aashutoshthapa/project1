@@ -1,0 +1,34 @@
+{% extends 'management/base.html' %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-header">
+        <h1>Edit Book</h1>
+    </div>
+
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Book Name</label>
+            <input type="text" name="name" value="{{ book.name }}" class="form-input" placeholder="Book Name" required>
+        </div>
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" value="{{ book.author }}" class="form-input" placeholder="Author Name" required>
+        </div>
+        <div class="form-group">
+            <label>Genre</label>
+            <input type="text" name="genre" value="{{ book.genre }}" class="form-input" placeholder="Genre">
+        </div>
+        <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="quantity" value="{{ book.quantity }}" class="form-input" placeholder="Quantity" min="0" required>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Book</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

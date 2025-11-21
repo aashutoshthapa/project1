@@ -1,0 +1,59 @@
+{% extends 'customers/base.html' %}
+
+{% block title %}My Library{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>My Dashboard</h1>
+    <div>
+        <span>Welcome, <strong>{{ request.user.username }}</strong></span>
+    </div>
+</div>
+
+<div class="table-container">
+    <h3>My Borrowed Books (Linked to {{ request.user.email }})</h3>
+    
+    {% if transactions %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Book Name</th>
+                    <th>Issue Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.book.name }}</td>
+                    <td>{{ t.issue_date }}</td>
+                    <td>
+                        {% if t.returned %}
+                            {{ t.return_date }}
+                        {% else %}
+                            Expected: {{ t.return_date|default:"Indefinite" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if t.returned %}
+                            <span class="status-returned">Returned</span>
+                        {% else %}
+                            <span class="status-issued">Borrowed</span>
+                            {% if t.due_status %}
+                                <span class="due-status">{{ t.due_status }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-table">
+            <h4>No history found.</h4>
+            <p>We couldn't find any books checked out to <strong>{{ request.user.email }}</strong>.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
