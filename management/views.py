@@ -6,12 +6,10 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 
-# ==========================================
-# AUTHENTICATION
-# ==========================================
+
 
 def admin_login(request):
-    # If already logged in as admin, send directly to dashboard
+
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
         return redirect('dashboard')
 
@@ -22,9 +20,7 @@ def admin_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # --- SECURITY CHECK ---
-            # This ensures only Admins (is_staff=True) can login here.
-            # Students (is_staff=False) will be rejected.
+
             if user.is_staff or user.is_superuser:
                 login(request, user)
                 
@@ -32,7 +28,7 @@ def admin_login(request):
             else:
                 messages.error(request, "Access Denied: Students must use the Student Portal.")
                 return redirect('admin_login')
-            # ----------------------
+
         else:
             messages.error(request, "Invalid username or password.")
             return redirect('admin_login')
@@ -44,9 +40,7 @@ def admin_logout(request):
     messages.info(request, "Admin logged out successfully.")
     return redirect('admin_login')
 
-# ==========================================
-# DASHBOARD (Your Logic Preserved)
-# ==========================================
+
 
 @login_required(login_url='admin_login')
 def dashboard(request):
@@ -72,9 +66,7 @@ def dashboard(request):
         "transaction_count": total_transaction
     })
 
-# ==========================================
-# BOOKS
-# ==========================================
+
 
 @login_required(login_url='admin_login')
 def book(request):
@@ -129,9 +121,7 @@ def deletebook(request, book_id):
     messages.success(request, "Book deleted successfully!")
     return redirect("book")
 
-# ==========================================
-# CUSTOMERS
-# ==========================================
+
 
 @login_required(login_url='admin_login')
 def customer(request):
@@ -183,9 +173,7 @@ def deletecustomer(request, customer_id):
     messages.success(request, "Customer deleted successfully!")
     return redirect("customer")
 
-# ==========================================
-# TRANSACTIONS
-# ==========================================
+
 
 @login_required(login_url='admin_login')
 def transaction(request):
@@ -246,7 +234,7 @@ def return_transaction(request, transaction_id):
         t.return_date = date.today()
         t.save()
 
-        # Restore Stock
+
         t.book.quantity += 1
         t.book.save()
         messages.success(request, f"Book '{t.book.name}' returned!")

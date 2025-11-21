@@ -1,25 +1,25 @@
 from django.db import models
 from django.utils import timezone
-# Create your models here.
+
 
 
 class Book(models.Model):
-    book_id = models.AutoField(primary_key=True)  # Explicit primary key
-    name = models.CharField(max_length=200)       # max_length is required
-    author = models.CharField(max_length=200)     # max_length is required
-    genre = models.CharField(max_length=100, blank=True)  # optional field
-    quantity = models.IntegerField(default=0)     # default value for numbers
+    book_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    author = models.CharField(max_length=200)
+    genre = models.CharField(max_length=100, blank=True)
+    quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
     
 
 class Customer(models.Model):
-    customer_id = models.AutoField(primary_key=True)  # Explicit primary key
-    name = models.CharField(max_length=200)           # max_length is required
-    address = models.CharField(max_length=200)        # max_length is required
-    phone = models.CharField(max_length=100, blank=True, unique=True)  # optional field
-    email = models.EmailField(default="")             # default empty string for email
+    customer_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    phone = models.CharField(max_length=100, blank=True, unique=True)
+    email = models.EmailField(default="")
 
     def __str__(self):
         return self.name
@@ -52,5 +52,4 @@ class Transaction(models.Model):
            
             return f"{days_late} days late"
         
-        # If not overdue, return an empty string
         return ""

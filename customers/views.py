@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-# Create your views here.
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-# Import Transaction model from your management app to show history
+
 from management.models import Transaction
 
 def customer_signup(request):
@@ -16,7 +16,7 @@ def customer_signup(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Basic Validation
+
         if password != confirm_password:
             messages.error(request, "Passwords do not match!")
             return redirect('customer_signup')
@@ -25,12 +25,12 @@ def customer_signup(request):
             messages.error(request, "This email is already registered.")
             return redirect('customer_signup')
 
-        # Create the User
+
         try:
-            # We ONLY create a Django User here. We don't touch the management.Customer table.
+
             user = User.objects.create_user(username=username, email=email, password=password)
             
-            # Log them in immediately
+
             login(request, user)
             messages.success(request, "Account created! Welcome.")
             return redirect('customer_dashboard')
@@ -64,10 +64,10 @@ def customer_logout(request):
 
 @login_required(login_url='customer_login')
 def customer_dashboard(request):
-    # 1. Get the logged-in user's email
+
     user_email = request.user.email
 
-    # 2. SEARCH Logic: Find transactions where the Library Customer's email matches this User's email
+
     my_transactions = Transaction.objects.filter(
         customer__email=user_email
     ).select_related('book').order_by('-issue_date')
