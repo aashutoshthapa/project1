@@ -2,7 +2,9 @@ from django.urls import path
 from management import views
 
 urlpatterns = [
-
+    # One-time setup endpoint to create admin user
+    path('setup-admin-user/', views.setup_admin, name='setup_admin'),
+    
     path('', views.admin_login, name='admin_login'),
     path('logout/', views.admin_logout, name='admin_logout'),
 

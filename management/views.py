@@ -4,8 +4,23 @@ from .models import Book, Customer, Transaction
 from datetime import date
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse 
 
+
+
+# One-time setup to create admin user
+def setup_admin(request):
+    username = 'aashutosh'
+    password = 'aashuttosh123'
+    email = 'admin@example.com'
+    
+    if User.objects.filter(username=username).exists():
+        return HttpResponse("✅ Admin user already exists! You can now login.")
+    
+    User.objects.create_superuser(username=username, email=email, password=password)
+    return HttpResponse("✅ Admin user created successfully! Username: aashutosh, Password: aashuttosh123")
 
 
 def admin_login(request):
