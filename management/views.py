@@ -23,6 +23,10 @@ def setup_admin(request):
     return HttpResponse("✅ Admin user created successfully! Username: aashutosh, Password: aashuttosh123")
 
 
+def home(request):
+    return render(request, 'management/home.html')
+
+
 def admin_login(request):
 
     if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
