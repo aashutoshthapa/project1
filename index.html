@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-group">
+                    <div class="sidebar-group-label">Library Management</div>
+                    <div class="sidebar-group-content">
+                        <nav class="sidebar-menu">
+                            <a href="#dashboard" class="sidebar-menu-item active" data-page="dashboard">
+                                <i class="fas fa-book-open"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#books" class="sidebar-menu-item" data-page="books">
+                                <i class="fas fa-book"></i>
+                                <span>Books</span>
+                            </a>
+                            <a href="#customers" class="sidebar-menu-item" data-page="customers">
+                                <i class="fas fa-users"></i>
+                                <span>Customers</span>
+                            </a>
+                            <a href="#transactions" class="sidebar-menu-item" data-page="transactions">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Transactions</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Main Area -->
+            <main class="main-area">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page active">
+                    <div class="page-content">
+                        <div class="hero-section">
+                            <i class="fas fa-book-open hero-icon"></i>
+                            <h1>Library Management System</h1>
+                            <p>Manage your books, customers, and transactions efficiently</p>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <h3>Total Books</h3>
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="totalBooks">0</div>
+                                    <p>Available in library</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <h3>Registered Customers</h3>
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="totalCustomers">0</div>
+                                    <p>Active members</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <h3>Active Transactions</h3>
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="activeTransactions">0</div>
+                                    <p>Books currently issued</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <h3>Returned Books</h3>
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="returnedBooks">0</div>
+                                    <p>Successfully returned</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions-card">
+                            <h2>Quick Actions</h2>
+                            <div class="quick-actions-grid">
+                                <div class="quick-action-item" data-page="books">
+                                    <i class="fas fa-book"></i>
+                                    <div>
+                                        <h3>Manage Books</h3>
+                                        <p>Add, edit, or remove books from inventory</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="quick-action-item" data-page="customers">
+                                    <i class="fas fa-users"></i>
+                                    <div>
+                                        <h3>Manage Customers</h3>
+                                        <p>Register new customers or update information</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="quick-action-item" data-page="transactions">
+                                    <i class="fas fa-file-alt"></i>
+                                    <div>
+                                        <h3>Issue/Return Books</h3>
+                                        <p>Handle book transactions and returns</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Books Page -->
+                <div id="books" class="page">
+                    <div class="page-content">
+                        <div class="page-header">
+                            <h1>Books Management</h1>
+                            <button class="btn btn-primary" id="addBookBtn">
+                                <i class="fas fa-plus"></i>
+                                Add Book
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Books List</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Author</th>
+                                                <th>Genre</th>
+                                                <th>Total Qty</th>
+                                                <th>Available</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="booksTableBody">
+                                            <!-- Books will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customers Page -->
+                <div id="customers" class="page">
+                    <div class="page-content">
+                        <div class="page-header">
+                            <h1>Customers Management</h1>
+                            <button class="btn btn-primary" id="addCustomerBtn">
+                                <i class="fas fa-plus"></i>
+                                Add Customer
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Customers List</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Phone</th>
+                                                <th>Age</th>
+                                                <th>Gender</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="customersTableBody">
+                                            <!-- Customers will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Page -->
+                <div id="transactions" class="page">
+                    <div class="page-content">
+                        <div class="page-header">
+                            <h1>Transactions Management</h1>
+                            <button class="btn btn-primary" id="addTransactionBtn">
+                                <i class="fas fa-plus"></i>
+                                Issue Book
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Transactions List</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Customer</th>
+                                                <th>Book</th>
+                                                <th>Issue Date</th>
+                                                <th>Return Date</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="transactionsTableBody">
+                                            <!-- Transactions will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Book Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="bookModalTitle">Add New Book</h2>
+                <button class="modal-close" id="closeBookModal">&times;</button>
+            </div>
+            <form id="bookForm" class="modal-form">
+                <div class="form-group">
+                    <label for="bookName">Book Name</label>
+                    <input type="text" id="bookName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookAuthor">Author</label>
+                    <input type="text" id="bookAuthor" name="author" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookGenre">Genre</label>
+                    <input type="text" id="bookGenre" name="genre" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookQuantity">Quantity</label>
+                    <input type="number" id="bookQuantity" name="quantity" min="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Book</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBookBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="customerModalTitle">Add New Customer</h2>
+                <button class="modal-close" id="closeCustomerModal">&times;</button>
+            </div>
+            <form id="customerForm" class="modal-form">
+                <div class="form-group">
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Address</label>
+                    <input type="text" id="customerAddress" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number</label>
+                    <input type="tel" id="customerPhone" name="phone_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAge">Age</label>
+                    <input type="number" id="customerAge" name="age" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerGender">Gender</label>
+                    <select id="customerGender" name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Customer</button>
+                    <button type="button" class="btn btn-secondary" id="cancelCustomerBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="transactionModalTitle">Issue New Book</h2>
+                <button class="modal-close" id="closeTransactionModal">&times;</button>
+            </div>
+            <form id="transactionForm" class="modal-form">
+                <div class="form-group">
+                    <label for="transactionCustomer">Customer</label>
+                    <select id="transactionCustomer" name="customer_id" required>
+                        <option value="">Select customer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionBook">Book</label>
+                    <select id="transactionBook" name="book_id" required>
+                        <option value="">Select book</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transactionIssueDate">Issue Date</label>
+                    <input type="date" id="transactionIssueDate" name="issue_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="transactionReturnDate">Expected Return Date</label>
+                    <input type="date" id="transactionReturnDate" name="return_date" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Issue Book</button>
+                    <button type="button" class="btn btn-secondary" id="cancelTransactionBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
