@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-4k48=%60$!sbhv-rgip@kvp-k^bpgc-2!j)yfp&@=39rh5#zzl
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.aashutoshthapa.com.np', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.vercel.app', '.aashutoshthapa.com.np', '127.0.0.1', 'localhost','project1-aashutoshthapa9917-5fbndnu1.apn.leapcell.dev']
 
 INSTALLED_APPS = [
     'management',
